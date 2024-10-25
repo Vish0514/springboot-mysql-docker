@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bezkoder-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bezkoder-app
+  template:
+    metadata:
+      labels:
+        app: bezkoder-app
+    spec:
+      containers:
+        - name: bezkoder-app
+          image: spring-app:latest  
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQLDB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: bezkoder-config
+                  key: MYSQLDB_USER
+            - name: MYSQLDB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: bezkoder-config
+                  key: MYSQLDB_DATABASE
+            - name: MYSQLDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bezkoder-secret
+                  key: MYSQLDB_ROOT_PASSWORD
+            - name: MYSQLDB_DOCKER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: bezkoder-config
+                  key: MYSQLDB_DOCKER_PORT
+            - name: SPRING_APPLICATION_JSON
+              value: '{
+                "spring.datasource.url": "jdbc:mysql://mysqldb:'"${MYSQLDB_DOCKER_PORT}"'/'"${MYSQLDB_DATABASE}"'?useSSL=false",
+                "spring.datasource.username": "'"${MYSQLDB_USER}"'",
+                "spring.datasource.password": "'"${MYSQLDB_ROOT_PASSWORD}"'",
+                "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect",
+                "spring.jpa.hibernate.ddl-auto": "update"
+              }'
+      restartPolicy: Always

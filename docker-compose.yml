@@ -16,6 +16,7 @@ services:
     depends_on:
       - mysqldb
     build: ./bezkoder-app
+    image: spring-app:latest
     restart: on-failure
     env_file: ./.env
     ports:
