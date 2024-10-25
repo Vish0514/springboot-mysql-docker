@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Tutorial</title>
+</head>
+<body>
+    <h1>Add New Tutorial</h1>
+    <form th:action="@{/tutorials/add}" th:object="${tutorial}" method="post">
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" />
+        <br>
+        <label>Description:</label>
+        <input type="text" th:field="*{description}" />
+        <br>
+        <label>Published:</label>
+        <input type="checkbox" th:field="*{published}" />
+        <br>
+        <button type="submit">Add</button>
+    </form>
+    <a href="/tutorials">Back to List</a>
+</body>
+</html>
