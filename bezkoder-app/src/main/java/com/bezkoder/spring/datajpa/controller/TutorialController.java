@@ -29,7 +29,7 @@ public class TutorialController {
 	@Autowired
 	TutorialRepository tutorialRepository;
 
-	@GetMapping("/tutorials")
+	@GetMapping
 	public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
 		try {
 			List<Tutorial> tutorials = new ArrayList<Tutorial>();
@@ -49,7 +49,7 @@ public class TutorialController {
 		}
 	}
 
-	@GetMapping("/tutorials/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
 		Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
 
