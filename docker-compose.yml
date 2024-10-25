@@ -15,7 +15,9 @@ services:
   app:
     depends_on:
       - mysqldb
-    build: ./bezkoder-app
+    build: 
+      context: ./bezkoder-app
+      dockerfile: Dockerfile
     restart: on-failure
     env_file: ./.env
     ports:
