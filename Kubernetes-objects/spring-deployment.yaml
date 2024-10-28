@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bezkoder-app
-          image: spring-app:latest  
+          image: spring-app:latest
           ports:
             - containerPort: 8080
           env:
@@ -39,11 +39,8 @@ spec:
                   name: bezkoder-config
                   key: MYSQLDB_DOCKER_PORT
             - name: SPRING_APPLICATION_JSON
-              value: '{
-                "spring.datasource.url": "jdbc:mysql://mysqldb:'"${MYSQLDB_DOCKER_PORT}"'/'"${MYSQLDB_DATABASE}"'?useSSL=false",
-                "spring.datasource.username": "'"${MYSQLDB_USER}"'",
-                "spring.datasource.password": "'"${MYSQLDB_ROOT_PASSWORD}"'",
-                "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect",
-                "spring.jpa.hibernate.ddl-auto": "update"
-              }'
+              valueFrom:
+                configMapKeyRef:
+                  name: bezkoder-config
+                  key: SPRING_APPLICATION_JSON
       restartPolicy: Always
